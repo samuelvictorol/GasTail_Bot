@@ -1,7 +1,8 @@
 # 🐦‍🔥 GasTail Bot - Controle Financeiro
-> [Experimente Agora](https://t.me/GasTail_bot)
+> [Acesse aqui](https://t.me/GasTail_bot)
 
 <br>
+
 ![image](https://github.com/user-attachments/assets/5ad8990a-73e2-4ce8-8649-b6ce23b016f4)
 
 # Rodar o projeto com Docker
