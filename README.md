@@ -1,3 +1,7 @@
+# 🐦‍🔥 GasTail Bot - Controle Financeiro
+> [Experimente Agora](https://t.me/GasTail_bot)
+
+<br>
 ![image](https://github.com/user-attachments/assets/5ad8990a-73e2-4ce8-8649-b6ce23b016f4)
 
 # Rodar o projeto com Docker
@@ -8,7 +12,9 @@
 - [ ] docker run -p 5000:5000 gastail-bot
 
 ## Variáveis de Ambiente
- 
+ > Crie um arquivo .env na raíz do projeto e preencha as configurações de ambiente:
+<br>
+
  - TELEGRAM_BOT_TOKEN
  - BOT_BACKEND_URL
  - CONNECTION_STRING (mongodb)
