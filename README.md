@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/5ad8990a-73e2-4ce8-8649-b6ce23b016f4)
+
 # Rodar o projeto com Docker
 - [ ] Docker instalado e rodando na máquina.
 - [ ] NGROK instalado e com arquivo ngrok.exe na raíz do projeto.
