@@ -23,7 +23,7 @@
 ## 🎲 Banco de Dados - Mongodb
 
 > Linguagem: NoSql<br>
-> Framework: Quasar + Vue3<br>
+> Framework:  Mongo<br>
 > Para acessar a base diretamente pode ser necessário autorização prévia<br>
 > A base de dados do Projeto está em produção na url: [GasTail Database](https://cloud.mongodb.com/v2/67aa609b61c70d27b71fcc76#/metrics/replicaSet/67aa6181f84ff70f87a7315d/explorer/Projeto-1-db/acaos/find)<br>
 
