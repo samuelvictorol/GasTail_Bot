@@ -7,9 +7,13 @@ dotenv.config();
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const BOT_BACKEND_URL = process.env.BOT_BACKEND_URL;
-const greetings = '/menu\n' + ( new Date().getHours() < 12 ? '☀️  Bom dia, ' : new Date().getHours() < 18 ? '🌇  Boa tarde, ' : '🌃  Boa noite, ')
+const greetings = '/menu\n' + 
+    (new Date().getHours() < 6 ? '🌙 Boa madrugada, ' : 
+    new Date().getHours() < 12 ? '☀️ Bom dia, ' : 
+    new Date().getHours() < 18 ? '🌇 Boa tarde, ' : 
+    '🌃 Boa noite, ');
 
-// Instância do bot, apenas uma vez
+
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: false });
 
 let username = ''
@@ -38,7 +42,7 @@ const BotController = {
             if (response.status !== 200) {
                 console.error(`Erro ao enviar mensagem: ${response.status} - ${response.data}`);
             } else {
-                // console.log(`Mensagem enviada para o chat_id ${chatId}: ${text}`);
+                console.log(`✉️ Mensagem enviada para o chat_id ${chatId}`);
             }
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
@@ -47,7 +51,6 @@ const BotController = {
 
     webhook: async (req, res) => {
         const reqData = req.body;
-
         // console.log('Dados recebidos:', JSON.stringify(reqData));
 
         if (!reqData || !reqData.message) {
@@ -81,21 +84,6 @@ const UsingBot = {
             case '/menu':
                 await BotController.sendMessage(chatId, '\n' + greetings + username + '!\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5 + '\n' + BotEnum.FOOTER_START);
                 break;
-            case '/menu1':
-                await BotController.sendMessage(chatId, BotEnum.MENU_1);
-                break;
-            case '/menu2':
-                await BotController.sendMessage(chatId, BotEnum.MENU_2);
-                break;
-            case '/menu3':
-                await BotController.sendMessage(chatId, BotEnum.MENU_3);
-                break;
-            case '/menu4':
-                await BotController.sendMessage(chatId, BotEnum.MENU_4);
-                break;
-            case '/menu5':
-                await BotController.sendMessage(chatId, BotEnum.MENU_5);
-                break;
             case '/cred':
                 await BotController.sendMessage(chatId, "Você usou o comando /cred");
                 break;
@@ -119,7 +107,28 @@ const UsingBot = {
                 await BotController.sendMessage(chatId, BotEnum.MENU_4);
                 break;
             case '5':
-                await BotController.sendMessage(chatId, BotEnum.MENU_5);
+                try {
+                    const btcEthResponse = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=brl');
+                    const dolarResponse = await axios.get('https://economia.awesomeapi.com.br/json/last/USD-BRL');
+    
+                    const bitcoinPrice = btcEthResponse.data.bitcoin.brl;
+                    const ethereumPrice = btcEthResponse.data.ethereum.brl;
+                    const dolarPrice = dolarResponse.data.USDBRL.bid;
+    
+                    const fontes = 'Fontes: CoinGecko e AwesomeAPI';
+                    const truncarDuasCasas = (valor) => Math.floor(valor * 100) / 100;
+    
+                    const message = `Cotação Atual\n\n`
+                        + `🪙 Bitcoin: R$ ${truncarDuasCasas(bitcoinPrice).toFixed(2).replace('.', ',')}\n`
+                        + `💎 Ethereum: R$ ${truncarDuasCasas(ethereumPrice).toFixed(2).replace('.', ',')}\n`
+                        + `💵 Dólar: R$ ${truncarDuasCasas(parseFloat(dolarPrice) || 0).toFixed(2).replace('.', ',')}\n\n`
+                        + `${fontes}`;
+    
+                    await BotController.sendMessage(chatId, message);
+                } catch (error) {
+                    console.error('Erro ao buscar cotações:', error);
+                    await BotController.sendMessage(chatId, "Erro ao buscar cotações. Tente novamente mais tarde.");
+                }
                 break;
             default:
                 await BotController.sendMessage(chatId, BotEnum.MENU_INVALIDO);

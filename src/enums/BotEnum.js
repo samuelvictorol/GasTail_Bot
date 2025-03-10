@@ -7,8 +7,8 @@ const BotEnum = {
     MENU_1: '\n💰  1  Saldo\n',
     MENU_2: '🤑  2  Adicionar Crédito\n',
     MENU_3: '💸  3  Adicionar Gasto\n',
-    MENU_4: '🧾  4  Histórico de Transações\n',
-    MENU_5: '🔑  5  Meu Token\n',
+    MENU_4: '🕑  4  Histórico de Transações\n',
+    MENU_5: '🪙  5  Câmbio\n',
     COMANDO_INVALIDO: '🚫 Comando inválido. Tente novamente.',
     MENU_INVALIDO: '🚫 Opção inválida. Tente novamente.',
 }
