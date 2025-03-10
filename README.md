@@ -56,3 +56,8 @@
 ![image](https://github.com/user-attachments/assets/5ad8990a-73e2-4ce8-8649-b6ce23b016f4)
 ![image](https://github.com/user-attachments/assets/f0cac460-3c76-4d3d-abdd-79bae0a21fff)
 
+<br>
+
+> Por: [Samuel Victor](https://samuelvictorol.github.io/portfolio/)<br>
+> Javascript: Express + Quasar(vue3) Frameworks.
+
