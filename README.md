@@ -7,6 +7,7 @@
 [![image](https://github.com/user-attachments/assets/bd167cfd-7446-43c5-9320-5c1404098c69)](https://whimsical.com/gastail-bot-C5Pf2PrrrYgAQMaoXXVUEg)
 
 <br>
+
 # Rodar o projeto com Docker
 - [ ] Docker instalado e rodando na máquina.
 - [ ] NGROK instalado e com arquivo ngrok.exe na raíz do projeto.
