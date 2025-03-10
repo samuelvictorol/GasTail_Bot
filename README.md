@@ -2,7 +2,9 @@
 > [Acesse aqui](https://t.me/GasTail_bot)
 
 # Board do Projeto
-[![image](https://github.com/user-attachments/assets/bd167cfd-7446-43c5-9320-5c1404098c69)](https://t.me/GasTail_bot)
+> [Visualizar](https://whimsical.com/gastail-bot-C5Pf2PrrrYgAQMaoXXVUEg)
+
+[![image](https://github.com/user-attachments/assets/bd167cfd-7446-43c5-9320-5c1404098c69)](https://whimsical.com/gastail-bot-C5Pf2PrrrYgAQMaoXXVUEg)
 
 <br>
 # Rodar o projeto com Docker
