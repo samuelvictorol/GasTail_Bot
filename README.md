@@ -1,10 +1,10 @@
 # 🐦‍🔥 GasTail Bot - Controle Financeiro
 > [Acesse aqui](https://t.me/GasTail_bot)
 
+# Board do Projeto
+[![image](https://github.com/user-attachments/assets/bd167cfd-7446-43c5-9320-5c1404098c69)](https://t.me/GasTail_bot)
+
 <br>
-
-![image](https://github.com/user-attachments/assets/5ad8990a-73e2-4ce8-8649-b6ce23b016f4)
-
 # Rodar o projeto com Docker
 - [ ] Docker instalado e rodando na máquina.
 - [ ] NGROK instalado e com arquivo ngrok.exe na raíz do projeto.
@@ -27,9 +27,9 @@
 
 ```json
 {
-  "update_id": 218002779,
+  "update_id": 218021779,
   "message": {
-    "message_id": 105,
+    "message_id": 121,
     "from": {
       "id": 1331214492,
       "is_bot": false,
@@ -38,14 +38,19 @@
       "language_code": "pt-br"
     },
     "chat": {
-      "id": 1331214492,
+      "id": 1331314492,
       "first_name": "Samuel Victor",
       "username": "Samvctr",
       "type": "private"
     },
-    "date": 1741381826,
-    "text": "olá"
+    "date": 12315581826,
+    "text": "Olá GasTail Bot!"
   }
 }
 
 ```
+
+
+![image](https://github.com/user-attachments/assets/5ad8990a-73e2-4ce8-8649-b6ce23b016f4)
+![image](https://github.com/user-attachments/assets/f0cac460-3c76-4d3d-abdd-79bae0a21fff)
+
