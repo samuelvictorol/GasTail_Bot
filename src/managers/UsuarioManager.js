@@ -1,9 +1,9 @@
-const { Usuario: Usuario } = require("../models/Usuario");
+const { Usuario: UsuarioModel } = require("../models/Usuario");
 
 const UsuarioManager = {
     criar_usuario: async (userData) => {
         // objeto 'chat' do hook do Telegram
-        const usuarioExistente = await Usuario.findOne({ username: userData.username });
+        const usuarioExistente = await UsuarioModel.findOne({ username: userData.username });
         if (usuarioExistente) {
             return usuarioExistente;
         }

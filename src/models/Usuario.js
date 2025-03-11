@@ -24,7 +24,7 @@ const usuarioSchema = new Schema({
         type: String,
         required: true,
     },
-    acoes_ids: [{
+    acoes: [{
         type: mongoose.Schema.Types.ObjectId, // Referência para ações no banco
         ref: 'Acao',
     }]

@@ -4,6 +4,7 @@ const axios = require('axios');
 const BotEnum = require('../enums/BotEnum');
 const UsuarioManager = require('../managers/UsuarioManager');
 const Utils = require('../Utils');
+const AcaoManager = require('../managers/AcaoManager');
 
 dotenv.config();
 
@@ -14,13 +15,13 @@ const getGreeting = () => {
     let greeting;
 
     if (hour < 6) {
-        greeting = '🌙 Boa madrugada, ';
+        greeting = '🐦‍🔥🌙  Boa madrugada, ';
     } else if (hour < 12) {
-        greeting = '☀️ Bom dia, ';
+        greeting = '🐦‍🔥☀️  Bom dia, ';
     } else if (hour < 18) {
-        greeting = '🌇 Boa tarde, ';
+        greeting = '🐦‍🔥🌇  Boa tarde, ';
     } else {
-        greeting = '🌃 Boa noite, ';
+        greeting = '🐦‍🔥🌃  Boa noite, ';
     }
 
     return `/menu\n${greeting}`;
@@ -67,16 +68,18 @@ const BotController = {
         const reqData = req.body;
         // console.log('Dados recebidos:', JSON.stringify(reqData));
 
-        if (!reqData || !reqData.message) {
+        if(!reqData) return res.status(400).json({ error: 'Mensagem não recebida corretamente' });
+        if( reqData && reqData.edited_message ) return res.status(200).json({ status: 'ok' });
+        else if (reqData && !reqData.message) {
             return res.status(400).json({ error: 'Mensagem não recebida corretamente' });
         }
 
         try {
-            const { message } = reqData;
+            const message = reqData.message ? reqData.message : reqData.edited_message;
             const chat = message.chat;
             nome_usuario = message.chat.first_name ? message.chat.first_name : 'Usuário';
             // evita que o bot "engasgue" caso receba um tipo como imagem ou diferente de string do usuario
-            if(!message.text) {
+            if(!message || !message.text) {
                 await BotController.sendMessage(chat.id, BotEnum.TIPO_MENSAGEM_INVALIDA);
                 return res.json({ status: 'ok' });
             }
@@ -98,13 +101,25 @@ const BotManager = {
         console.log('Comando:', comando);
         switch(comando) {
             case '/start':
-                await BotController.sendMessage(chat.id, '\n' + greetings + nome_usuario + '!\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5 + '\n' + BotEnum.FOOTER_START);
+                await BotController.sendMessage(chat.id,  greetings + nome_usuario + '!\n\n🐦‍🔥 Seja bem vindo(a),\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + '\n' + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5  + BotEnum.MENU_6 + '\n' + BotEnum.FOOTER_START);
                 break;
             case '/menu':
-                await BotController.sendMessage(chat.id, '\n' + greetings + nome_usuario + '!\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5 + '\n' + BotEnum.FOOTER_START);
+                await BotController.sendMessage(chat.id, '\n' + greetings + nome_usuario + '!\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + '\n' + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5 + BotEnum.MENU_6 + '\n' + BotEnum.FOOTER_START);
                 break;
             case '/cred':
-                await BotController.sendMessage(chat.id, "Você usou o comando /cred");
+                const credCommandObj = Utils.criaObjetoComandoCred(text);
+                if (credCommandObj.error) {
+                    await BotController.sendMessage(chat.id, credCommandObj.error);
+                } else {
+                    await AcaoManager.criar_acao(chat.username, credCommandObj)
+                    .then(async (saldo) => {
+                        await BotController.sendMessage(chat.id, '✅📈 Entrada de Crédito registrada com sucesso!\n\n🐦‍🔥 ' + BotEnum.SALDO + Utils.formataParaReal(saldo));
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao registrar crédito:', error);
+                        return null;
+                    });
+                }
                 break;
             default:
                 await BotController.sendMessage(chat.id, BotEnum.COMANDO_INVALIDO);
@@ -119,10 +134,10 @@ const BotManager = {
                     console.error('Erro ao criar usuário:', error);
                     return null;
                 });
-                await BotController.sendMessage(chat.id,  BotEnum.MENU_1 + '\n' + BotEnum.SALDO + Utils.formataParaReal(usuario.saldo));
+                await BotController.sendMessage(chat.id, '\n🐦‍🔥 ' + BotEnum.SALDO + Utils.formataParaReal(usuario.saldo));
                 break;
             case '2':
-                await BotController.sendMessage(chat.id, BotEnum.MENU_2);
+                await BotController.sendMessage(chat.id,  BotEnum.MENU_2_INSTRUCOES);
                 break;
             case '3':
                 await BotController.sendMessage(chat.id, BotEnum.MENU_3);
@@ -153,6 +168,9 @@ const BotManager = {
                     console.error('Erro ao buscar cotações:', error);
                     await BotController.sendMessage(chat.id, "Erro ao buscar cotações. Tente novamente mais tarde.");
                 }
+                break;
+            case '6':
+                await BotController.sendMessage(chat.id, BotEnum.MENU_6);
                 break;
             default:
                 await BotController.sendMessage(chat.id, BotEnum.MENU_INVALIDO);
