@@ -2,6 +2,8 @@ const TelegramBot = require('node-telegram-bot-api');
 const dotenv = require('dotenv');
 const axios = require('axios');
 const BotEnum = require('../enums/BotEnum');
+const UsuarioManager = require('../managers/UsuarioManager');
+const Utils = require('../Utils');
 
 dotenv.config();
 
@@ -28,7 +30,7 @@ const greetings = getGreeting();
 
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: false });
 
-let username = ''
+let nome_usuario = ''
 
 const BotController = {
     setWebhook: async () => {
@@ -71,15 +73,16 @@ const BotController = {
 
         try {
             const { message } = reqData;
-            const chatId = message.chat.id;
-            username = message.chat.first_name ? message.chat.first_name : 'Usuário';
+            const chat = message.chat;
+            nome_usuario = message.chat.first_name ? message.chat.first_name : 'Usuário';
+            // evita que o bot "engasgue" caso receba um tipo como imagem ou diferente de string do usuario
             if(!message.text) {
-                await BotController.sendMessage(chatId, BotEnum.TIPO_MENSAGEM_INVALIDA);
+                await BotController.sendMessage(chat.id, BotEnum.TIPO_MENSAGEM_INVALIDA);
                 return res.json({ status: 'ok' });
             }
             if (message.text.startsWith('/')) {
-                await UsingBot.fluxo_comando(chatId, message.text);
-            } else await UsingBot.fluxo_menu(chatId, message.text);
+                await BotManager.fluxo_comando(chat, message.text);
+            } else await BotManager.fluxo_menu(chat, message.text);
 
             return res.json({ status: 'ok' });
         } catch (error) {
@@ -89,38 +92,43 @@ const BotController = {
     }
 }
 
-const UsingBot = {
-    fluxo_comando: async (chatId, text) => {
+const BotManager = {
+    fluxo_comando: async (chat, text) => {
         const comando = text.split(" ")[0]; // Pega apenas a primeira palavra
         console.log('Comando:', comando);
         switch(comando) {
             case '/start':
-                await BotController.sendMessage(chatId, '\n' + greetings + username + '!\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5 + '\n' + BotEnum.FOOTER_START);
+                await BotController.sendMessage(chat.id, '\n' + greetings + nome_usuario + '!\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5 + '\n' + BotEnum.FOOTER_START);
                 break;
             case '/menu':
-                await BotController.sendMessage(chatId, '\n' + greetings + username + '!\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5 + '\n' + BotEnum.FOOTER_START);
+                await BotController.sendMessage(chat.id, '\n' + greetings + nome_usuario + '!\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5 + '\n' + BotEnum.FOOTER_START);
                 break;
             case '/cred':
-                await BotController.sendMessage(chatId, "Você usou o comando /cred");
+                await BotController.sendMessage(chat.id, "Você usou o comando /cred");
                 break;
             default:
-                await BotController.sendMessage(chatId, BotEnum.COMANDO_INVALIDO);
+                await BotController.sendMessage(chat.id, BotEnum.COMANDO_INVALIDO);
                 break;
         }
     },
-    fluxo_menu: async (chatId, text) => {
+    fluxo_menu: async (chat, text) => {
         switch(text) {
             case '1':
-                await BotController.sendMessage(chatId, BotEnum.MENU_1);
+                const usuario = await UsuarioManager.criar_usuario(chat)
+                .catch((error) => {
+                    console.error('Erro ao criar usuário:', error);
+                    return null;
+                });
+                await BotController.sendMessage(chat.id,  BotEnum.MENU_1 + '\n' + BotEnum.SALDO + Utils.formataParaReal(usuario.saldo));
                 break;
             case '2':
-                await BotController.sendMessage(chatId, BotEnum.MENU_2);
+                await BotController.sendMessage(chat.id, BotEnum.MENU_2);
                 break;
             case '3':
-                await BotController.sendMessage(chatId, BotEnum.MENU_3);
+                await BotController.sendMessage(chat.id, BotEnum.MENU_3);
                 break;
             case '4':
-                await BotController.sendMessage(chatId, BotEnum.MENU_4);
+                await BotController.sendMessage(chat.id, BotEnum.MENU_4);
                 break;
             case '5':
                 try {
@@ -140,14 +148,14 @@ const UsingBot = {
                         + `💵 Dólar: R$ ${truncarDuasCasas(parseFloat(dolarPrice) || 0).toFixed(2).replace('.', ',')}\n\n`
                         + `${fontes}`;
     
-                    await BotController.sendMessage(chatId, message);
+                    await BotController.sendMessage(chat.id, message);
                 } catch (error) {
                     console.error('Erro ao buscar cotações:', error);
-                    await BotController.sendMessage(chatId, "Erro ao buscar cotações. Tente novamente mais tarde.");
+                    await BotController.sendMessage(chat.id, "Erro ao buscar cotações. Tente novamente mais tarde.");
                 }
                 break;
             default:
-                await BotController.sendMessage(chatId, BotEnum.MENU_INVALIDO);
+                await BotController.sendMessage(chat.id, BotEnum.MENU_INVALIDO);
                 break;
         }
     }
