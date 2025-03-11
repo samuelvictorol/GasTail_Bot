@@ -7,12 +7,24 @@ dotenv.config();
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const BOT_BACKEND_URL = process.env.BOT_BACKEND_URL;
-const greetings = '/menu\n' + 
-    (new Date().getHours() < 6 ? '🌙 Boa madrugada, ' : 
-    new Date().getHours() < 12 ? '☀️ Bom dia, ' : 
-    new Date().getHours() < 18 ? '🌇 Boa tarde, ' : 
-    '🌃 Boa noite, ');
+const getGreeting = () => {
+    const hour = new Date().getHours();
+    let greeting;
 
+    if (hour < 6) {
+        greeting = '🌙 Boa madrugada, ';
+    } else if (hour < 12) {
+        greeting = '☀️ Bom dia, ';
+    } else if (hour < 18) {
+        greeting = '🌇 Boa tarde, ';
+    } else {
+        greeting = '🌃 Boa noite, ';
+    }
+
+    return `/menu\n${greeting}`;
+};
+
+const greetings = getGreeting();
 
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: false });
 
@@ -61,6 +73,10 @@ const BotController = {
             const { message } = reqData;
             const chatId = message.chat.id;
             username = message.chat.first_name ? message.chat.first_name : 'Usuário';
+            if(!message.text) {
+                await BotController.sendMessage(chatId, BotEnum.TIPO_MENSAGEM_INVALIDA);
+                return res.json({ status: 'ok' });
+            }
             if (message.text.startsWith('/')) {
                 await UsingBot.fluxo_comando(chatId, message.text);
             } else await UsingBot.fluxo_menu(chatId, message.text);
