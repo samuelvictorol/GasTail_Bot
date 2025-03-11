@@ -8,7 +8,7 @@ const UsuarioManager = {
             return usuarioExistente;
         }
         // se não tiver usuário com esse username, cria um novo
-        const usuario = new Usuario({
+        const usuario = new UsuarioModel({
             nome: userData.first_name,
             username: userData.username,
             saldo: 0,
