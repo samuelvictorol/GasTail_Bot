@@ -1,8 +1,8 @@
 # 🐦‍🔥 GASTAIL BOT [acesse aqui](https://t.me/GasTail_bot) 
 
-## 💡 [Visualizar Board](https://whimsical.com/gastail-bot-C5Pf2PrrrYgAQMaoXXVUEg)
+[![image](https://github.com/user-attachments/assets/ccc81998-bc69-4ff3-9967-f0fbb0eaf1bc)](https://whimsical.com/gastail-bot-C5Pf2PrrrYgAQMaoXXVUEg)
 
-[![image](https://github.com/user-attachments/assets/bd167cfd-7446-43c5-9320-5c1404098c69)](https://whimsical.com/gastail-bot-C5Pf2PrrrYgAQMaoXXVUEg)
+## 💡 [Visualizar Board](https://whimsical.com/gastail-bot-C5Pf2PrrrYgAQMaoXXVUEg)
 
 <br>
 
