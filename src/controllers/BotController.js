@@ -106,17 +106,35 @@ const BotManager = {
             case '/menu':
                 await BotController.sendMessage(chat.id, '\n' + greetings + nome_usuario + '!\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + '\n' + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5 + BotEnum.MENU_6 + '\n' + BotEnum.FOOTER_START);
                 break;
+            case '/invest':
+                await BotController.sendMessage(chat.id, + '🏗️ Em desenvolvimento\n' + BotEnum.MENU_1_INSTRUCOES);
+                break;
             case '/cred':
                 const credCommandObj = Utils.criaObjetoComandoCred(text);
                 if (credCommandObj.error) {
                     await BotController.sendMessage(chat.id, credCommandObj.error);
                 } else {
-                    await AcaoManager.criar_acao(chat.username, credCommandObj)
+                    await AcaoManager.criar_acao_entrada(chat.username ? chat.username : chat.id, credCommandObj)
                     .then(async (saldo) => {
                         await BotController.sendMessage(chat.id, '✅📈 Entrada de Crédito registrada com sucesso!\n\n🐦‍🔥 ' + BotEnum.SALDO + Utils.formataParaReal(saldo));
                     })
                     .catch((error) => {
                         console.error('Erro ao registrar crédito:', error);
+                        return null;
+                    });
+                }
+                break;
+            case '/deb':
+                const debCommandObj = Utils.criaObjetoComandoDeb(text);
+                if (debCommandObj.error) {
+                    await BotController.sendMessage(chat.id, debCommandObj.error);
+                } else {
+                    await AcaoManager.criar_acao_gasto(chat.username ? chat.username : chat.id, debCommandObj)
+                    .then(async (saldo) => {
+                        await BotController.sendMessage(chat.id, '✅📉 Saída de Crédito registrada com sucesso!\n\n🐦‍🔥 ' + BotEnum.SALDO + Utils.formataParaReal(saldo));
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao registrar débito:', error);
                         return null;
                     });
                 }
@@ -134,13 +152,13 @@ const BotManager = {
                     console.error('Erro ao criar usuário:', error);
                     return null;
                 });
-                await BotController.sendMessage(chat.id, '\n🐦‍🔥 ' + BotEnum.SALDO + Utils.formataParaReal(usuario.saldo));
+                await BotController.sendMessage(chat.id, '\n🐦‍🔥 ' + BotEnum.SALDO + Utils.formataParaReal(usuario.saldo) + '\n\n' + BotEnum.MENU_1_INSTRUCOES);
                 break;
             case '2':
                 await BotController.sendMessage(chat.id,  BotEnum.MENU_2_INSTRUCOES);
                 break;
             case '3':
-                await BotController.sendMessage(chat.id, BotEnum.MENU_3);
+                await BotController.sendMessage(chat.id, BotEnum.MENU_3_INSTRUCOES);
                 break;
             case '4':
                 await BotController.sendMessage(chat.id, BotEnum.MENU_4);
