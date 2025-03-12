@@ -101,13 +101,23 @@ const BotManager = {
         console.log('Comando:', comando);
         switch(comando) {
             case '/start':
-                await BotController.sendMessage(chat.id,  greetings + nome_usuario + '!\n\n🐦‍🔥 Seja bem vindo(a),\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + '\n' + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5  + BotEnum.MENU_6 + '\n' + BotEnum.FOOTER_START);
+                await BotController.sendMessage(chat.id,  greetings + nome_usuario + '!\n\n🐦‍🔥 Seja bem vindo(a),\n' 
+                    + BotEnum.START + BotEnum.MENU_0 + '\n' + BotEnum.MENU_1 + '\n' + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5  + BotEnum.MENU_6 + '\n' + BotEnum.FOOTER_START);
                 break;
             case '/menu':
-                await BotController.sendMessage(chat.id, '\n' + greetings + nome_usuario + '!\n' + BotEnum.START + '\n' + BotEnum.MENU_1 + '\n' + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5 + BotEnum.MENU_6 + '\n' + BotEnum.FOOTER_START);
+                await BotController.sendMessage(chat.id, '\n' + greetings + nome_usuario + 
+                    '!\n' + BotEnum.START + BotEnum.MENU_0 + '\n' + BotEnum.MENU_1 + '\n' + BotEnum.MENU_2 + BotEnum.MENU_3 + BotEnum.MENU_4 + BotEnum.MENU_5 + BotEnum.MENU_6 + '\n' + BotEnum.FOOTER_START);
+                break;
+            case '/saldo':
+                const usuario = await UsuarioManager.criar_usuario(chat)
+                .catch((error) => {
+                    console.error('Erro ao criar usuário:', error);
+                    return null;
+                });
+                await BotController.sendMessage(chat.id, '/saldo\n' + BotEnum.SALDO + Utils.formataParaReal(usuario.saldo) + (usuario.saldo <= 0 ? '' : ('\n\n' + BotEnum.MENU_1_INSTRUCOES)));
                 break;
             case '/invest':
-                await BotController.sendMessage(chat.id, + '🏗️ Em desenvolvimento\n' + BotEnum.MENU_1_INSTRUCOES);
+                await BotController.sendMessage(chat.id, '🏗️ Em desenvolvimento\n' + BotEnum.MENU_1_INSTRUCOES);
                 break;
             case '/cred':
                 const credCommandObj = Utils.criaObjetoComandoCred(text);
@@ -131,13 +141,16 @@ const BotManager = {
                 } else {
                     await AcaoManager.criar_acao_gasto(chat.username ? chat.username : chat.id, debCommandObj)
                     .then(async (saldo) => {
-                        await BotController.sendMessage(chat.id, '✅📉 Saída de Crédito registrada com sucesso!\n\n🐦‍🔥 ' + BotEnum.SALDO + Utils.formataParaReal(saldo));
+                        await BotController.sendMessage(chat.id, '✅📉  Gasto registrado com sucesso!\n\n🐦‍🔥 ' + BotEnum.SALDO + Utils.formataParaReal(saldo));
                     })
                     .catch((error) => {
                         console.error('Erro ao registrar débito:', error);
                         return null;
                     });
                 }
+                break;
+            case '/ajuda':
+                await BotController.sendMessage(chat.id, BotEnum.MENU_6_INSTRUCOES + BotEnum.REFERENCIA);
                 break;
             default:
                 await BotController.sendMessage(chat.id, BotEnum.COMANDO_INVALIDO);
@@ -152,7 +165,7 @@ const BotManager = {
                     console.error('Erro ao criar usuário:', error);
                     return null;
                 });
-                await BotController.sendMessage(chat.id, '\n🐦‍🔥 ' + BotEnum.SALDO + Utils.formataParaReal(usuario.saldo) + '\n\n' + BotEnum.MENU_1_INSTRUCOES);
+                await BotController.sendMessage(chat.id, '/saldo\n' + BotEnum.SALDO + Utils.formataParaReal(usuario.saldo) + (usuario.saldo <= 0 ? '' : ('\n\n' + BotEnum.MENU_1_INSTRUCOES)));
                 break;
             case '2':
                 await BotController.sendMessage(chat.id,  BotEnum.MENU_2_INSTRUCOES);
@@ -188,7 +201,7 @@ const BotManager = {
                 }
                 break;
             case '6':
-                await BotController.sendMessage(chat.id, BotEnum.MENU_6);
+                await BotController.sendMessage(chat.id, BotEnum.MENU_6_INSTRUCOES + BotEnum.REFERENCIA);
                 break;
             default:
                 await BotController.sendMessage(chat.id, BotEnum.MENU_INVALIDO);
