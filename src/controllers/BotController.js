@@ -159,6 +159,9 @@ const BotManager = {
     },
     fluxo_menu: async (chat, text) => {
         switch(text) {
+            case '0':
+                await BotController.sendMessage(chat.id, BotEnum.MENU_0_INSTRUCOES);
+                break;
             case '1':
                 const usuario = await UsuarioManager.criar_usuario(chat)
                 .catch((error) => {
