@@ -1,1 +1,9 @@
 // app global css in SCSS form
+.w100 {
+    width: 100%;
+}
+
+.bg-grad-1 {
+    background: rgb(227,204,21);
+    background: radial-gradient(circle, rgb(172, 15, 1) 0%, rgb(139, 25, 7) 50%, rgb(96, 3, 3) 100%);
+}
