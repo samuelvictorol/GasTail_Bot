@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf">
 
-    <q-header elevated class="bg-grad-1 text-white" height-hint="98">
+    <q-header elevated class="bg-grad-1 text-white row justify-center" height-hint="98">
       <q-toolbar>
         <q-toolbar-title>
           <q-avatar>
@@ -12,7 +12,7 @@
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab to="/page1" label="Perfil" />
+        <q-route-tab to="/" label="Perfil" />
         <q-route-tab to="/page3" label="Histórico" />
       </q-tabs>
     </q-header>

@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+* {
+    font-family: 'Montserrat', sans-serif;
+}
 // app global css in SCSS form
 .w100 {
     width: 100%;
@@ -5,5 +9,9 @@
 
 .bg-grad-1 {
     background: rgb(227,204,21);
-    background: radial-gradient(circle, rgb(172, 15, 1) 0%, rgb(139, 25, 7) 50%, rgb(96, 3, 3) 100%);
+    background: radial-gradient(circle, rgb(172, 15, 1) 0%, #8b1907 50%, rgb(96, 3, 3) 100%);
+}
+
+.border-left {
+    border-left: 4px solid #8b1907;
 }
